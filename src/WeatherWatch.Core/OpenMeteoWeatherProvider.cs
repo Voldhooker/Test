@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -9,7 +10,10 @@ namespace WeatherWatch.Core;
 /// </summary>
 public sealed class OpenMeteoWeatherProvider : IWeatherProvider
 {
+    // {0} = URL-escaped city name.
     private const string GeocodingUrlFormat = "https://geocoding-api.open-meteo.com/v1/search?name={0}&count=1";
+
+    // {0} = latitude, {1} = longitude.
     private const string ForecastUrlFormat = "https://api.open-meteo.com/v1/forecast?latitude={0}&longitude={1}&current=temperature_2m,relative_humidity_2m,wind_speed_10m";
 
     private readonly HttpClient _httpClient;
@@ -29,7 +33,7 @@ public sealed class OpenMeteoWeatherProvider : IWeatherProvider
 
     private async Task<(double Latitude, double Longitude)> ResolveCoordinatesAsync(string city, CancellationToken ct)
     {
-        var url = string.Format(GeocodingUrlFormat, Uri.EscapeDataString(city));
+        var url = string.Format(CultureInfo.InvariantCulture, GeocodingUrlFormat, Uri.EscapeDataString(city));
         using var response = await _httpClient.GetAsync(url, ct);
         response.EnsureSuccessStatusCode();
 
@@ -45,7 +49,7 @@ public sealed class OpenMeteoWeatherProvider : IWeatherProvider
     private async Task<CurrentWeather> FetchCurrentWeatherAsync(double latitude, double longitude, CancellationToken ct)
     {
         var url = string.Format(
-            System.Globalization.CultureInfo.InvariantCulture,
+            CultureInfo.InvariantCulture,
             ForecastUrlFormat,
             latitude,
             longitude);
