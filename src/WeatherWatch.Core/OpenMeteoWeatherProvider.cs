@@ -25,6 +25,11 @@ public sealed class OpenMeteoWeatherProvider : IWeatherProvider
 
     public async Task<WeatherReading> GetCurrentAsync(string city, CancellationToken ct = default)
     {
+        if (string.IsNullOrWhiteSpace(city))
+        {
+            throw new ArgumentException("City must not be empty.", nameof(city));
+        }
+
         var (latitude, longitude) = await ResolveCoordinatesAsync(city, ct);
         var current = await FetchCurrentWeatherAsync(latitude, longitude, ct);
 
@@ -58,10 +63,13 @@ public sealed class OpenMeteoWeatherProvider : IWeatherProvider
         response.EnsureSuccessStatusCode();
 
         await using var stream = await response.Content.ReadAsStreamAsync(ct);
-        var forecast = await JsonSerializer.DeserializeAsync<ForecastResponse>(stream, cancellationToken: ct);
 
-        return forecast?.Current
-            ?? throw new InvalidOperationException("Open-Meteo forecast response did not contain current weather data.");
+        // A missing "current" block is an API contract violation, so deserialization itself
+        // throws (Current is required) instead of us masking it with a domain-looking error.
+        var forecast = await JsonSerializer.DeserializeAsync<ForecastResponse>(stream, cancellationToken: ct)
+            ?? throw new JsonException("Open-Meteo forecast response was empty.");
+
+        return forecast.Current;
     }
 
     private sealed record GeocodingResponse(
@@ -71,8 +79,11 @@ public sealed class OpenMeteoWeatherProvider : IWeatherProvider
         [property: JsonPropertyName("latitude")] double Latitude,
         [property: JsonPropertyName("longitude")] double Longitude);
 
-    private sealed record ForecastResponse(
-        [property: JsonPropertyName("current")] CurrentWeather? Current);
+    private sealed record ForecastResponse
+    {
+        [JsonPropertyName("current")]
+        public required CurrentWeather Current { get; init; }
+    }
 
     private sealed record CurrentWeather(
         [property: JsonPropertyName("temperature_2m")] double Temperature,
