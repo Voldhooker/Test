@@ -11,6 +11,8 @@ public record WeatherReading
     public required decimal WindSpeedKmh { get; init; }
     public required int HumidityPercent { get; init; }
 
+    private WeatherReading() { }
+
     /// <summary>
     /// Creates a new weather reading with validated input ranges.
     /// </summary>
