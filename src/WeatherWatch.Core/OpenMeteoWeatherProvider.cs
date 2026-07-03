@@ -33,7 +33,12 @@ public sealed class OpenMeteoWeatherProvider : IWeatherProvider
         var (latitude, longitude) = await ResolveCoordinatesAsync(city, ct);
         var current = await FetchCurrentWeatherAsync(latitude, longitude, ct);
 
-        return WeatherReading.Create(city, current.Temperature, current.RelativeHumidity, current.WindSpeed);
+        return WeatherReading.Create(
+            city,
+            DateTime.UtcNow,
+            (decimal)current.Temperature,
+            (decimal)current.WindSpeed,
+            (int)Math.Round(current.RelativeHumidity, MidpointRounding.AwayFromZero));
     }
 
     private async Task<(double Latitude, double Longitude)> ResolveCoordinatesAsync(string city, CancellationToken ct)
