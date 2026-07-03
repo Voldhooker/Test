@@ -3,13 +3,13 @@ namespace WeatherWatch.Core;
 /// <summary>
 /// Represents an immutable weather reading with validated properties.
 /// </summary>
-internal record WeatherReading
+public record WeatherReading
 {
     public required string Location { get; init; }
     public required DateTime TimestampUtc { get; init; }
     public required decimal TemperatureCelsius { get; init; }
     public required decimal WindSpeedKmh { get; init; }
-    public required byte HumidityPercent { get; init; }
+    public required int HumidityPercent { get; init; }
 
     /// <summary>
     /// Creates a new weather reading with validated input ranges.
@@ -26,7 +26,7 @@ internal record WeatherReading
         DateTime timestampUtc,
         decimal temperatureCelsius,
         decimal windSpeedKmh,
-        byte humidityPercent)
+        int humidityPercent)
     {
         if (string.IsNullOrWhiteSpace(location))
         {
