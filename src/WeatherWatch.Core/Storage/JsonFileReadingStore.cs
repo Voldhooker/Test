@@ -25,7 +25,10 @@ public sealed class JsonFileReadingStore : IReadingStore
     {
         ArgumentNullException.ThrowIfNull(reading);
 
-        var readings = new List<WeatherReading>(await GetAllAsync(cancellationToken)) { reading };
+        var readings = new List<StoredWeatherReading>(await GetStoredReadingsAsync(cancellationToken))
+        {
+            StoredWeatherReading.FromDomain(reading)
+        };
 
         var directory = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrEmpty(directory))
@@ -39,15 +42,45 @@ public sealed class JsonFileReadingStore : IReadingStore
 
     public async Task<IReadOnlyList<WeatherReading>> GetAllAsync(CancellationToken cancellationToken = default)
     {
+        var readings = await GetStoredReadingsAsync(cancellationToken);
+        return readings.ConvertAll(static reading => reading.ToDomain());
+    }
+
+    private async Task<List<StoredWeatherReading>> GetStoredReadingsAsync(CancellationToken cancellationToken)
+    {
         if (!File.Exists(_filePath))
         {
             return [];
         }
 
         await using var stream = File.OpenRead(_filePath);
-        var readings = await JsonSerializer.DeserializeAsync<List<WeatherReading>>(
-            stream, SerializerOptions, cancellationToken);
+        var readings = await JsonSerializer.DeserializeAsync<List<StoredWeatherReading>>(
+            stream,
+            SerializerOptions,
+            cancellationToken);
 
         return readings ?? [];
+    }
+
+    private sealed record StoredWeatherReading(
+        string Location,
+        DateTime TimestampUtc,
+        decimal TemperatureCelsius,
+        decimal WindSpeedKmh,
+        int HumidityPercent)
+    {
+        public static StoredWeatherReading FromDomain(WeatherReading reading) => new(
+            reading.Location,
+            reading.TimestampUtc,
+            reading.TemperatureCelsius,
+            reading.WindSpeedKmh,
+            reading.HumidityPercent);
+
+        public WeatherReading ToDomain() => WeatherReading.Create(
+            Location,
+            TimestampUtc,
+            TemperatureCelsius,
+            WindSpeedKmh,
+            HumidityPercent);
     }
 }

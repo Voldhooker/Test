@@ -17,11 +17,12 @@ public sealed class JsonFileReadingStoreTests : IDisposable
         }
     }
 
-    private static WeatherReading CreateReading(int offsetMinutes = 0) => new(
-        new DateTimeOffset(2024, 6, 1, 12, 0, 0, TimeSpan.FromHours(2)).AddMinutes(offsetMinutes),
+    private static WeatherReading CreateReading(int offsetMinutes = 0) => WeatherReading.Create(
         "central-station",
-        21.5 + offsetMinutes,
-        48.25);
+        new DateTime(2024, 6, 1, 12, 0, 0, DateTimeKind.Utc).AddMinutes(offsetMinutes),
+        21.5m + offsetMinutes,
+        12.75m + offsetMinutes,
+        48 + offsetMinutes);
 
     [Fact]
     public async Task GetAllAsync_MissingFile_ReturnsEmptyList()
