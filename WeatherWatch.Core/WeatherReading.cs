@@ -4,22 +4,21 @@ namespace WeatherWatch.Core;
 /// A validated weather reading. Instances can only be produced via <see cref="Create"/>,
 /// so every reading is guaranteed to satisfy the domain invariants.
 /// </summary>
+/// <remarks>
+/// Positional record: the primary constructor parameters initialize the generated init-only
+/// properties directly (no assignment body). The primary constructor is private, so all
+/// construction is funnelled through the validating <see cref="Create"/> factory.
+/// </remarks>
 public sealed record WeatherReading
 {
-    // Private constructor: direct instantiation would bypass validation in Create.
     private WeatherReading(
         string location,
         DateTimeOffset timestampUtc,
         double temperatureCelsius,
         double windSpeedKmh,
         int humidityPercent)
-    {
-        Location = location;
-        TimestampUtc = timestampUtc;
-        TemperatureCelsius = temperatureCelsius;
-        WindSpeedKmh = windSpeedKmh;
-        HumidityPercent = humidityPercent;
-    }
+        => (Location, TimestampUtc, TemperatureCelsius, WindSpeedKmh, HumidityPercent)
+            = (location, timestampUtc, temperatureCelsius, windSpeedKmh, humidityPercent);
 
     public string Location { get; init; }
 
