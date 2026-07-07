@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "WeatherWatch.Cli/1.0.0": {
+        "dependencies": {
+          "WeatherWatch.Core": "1.0.0"
+        },
+        "runtime": {
+          "WeatherWatch.Cli.dll": {}
+        }
+      },
+      "WeatherWatch.Core/1.0.0": {
+        "runtime": {
+          "WeatherWatch.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "WeatherWatch.Cli/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "WeatherWatch.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
