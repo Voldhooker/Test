@@ -7,19 +7,29 @@ namespace WeatherWatch.Core;
 public sealed record WeatherReading
 {
     // Private constructor: direct instantiation would bypass validation in Create.
-    private WeatherReading()
+    private WeatherReading(
+        string location,
+        DateTimeOffset timestampUtc,
+        double temperatureCelsius,
+        double windSpeedKmh,
+        int humidityPercent)
     {
+        Location = location;
+        TimestampUtc = timestampUtc;
+        TemperatureCelsius = temperatureCelsius;
+        WindSpeedKmh = windSpeedKmh;
+        HumidityPercent = humidityPercent;
     }
 
-    public required string Location { get; init; }
+    public string Location { get; init; }
 
-    public required DateTimeOffset TimestampUtc { get; init; }
+    public DateTimeOffset TimestampUtc { get; init; }
 
-    public required double TemperatureCelsius { get; init; }
+    public double TemperatureCelsius { get; init; }
 
-    public required double WindSpeedKmh { get; init; }
+    public double WindSpeedKmh { get; init; }
 
-    public required int HumidityPercent { get; init; }
+    public int HumidityPercent { get; init; }
 
     public static WeatherReading Create(
         string location,
@@ -52,13 +62,11 @@ public sealed record WeatherReading
                 nameof(humidityPercent));
         }
 
-        return new WeatherReading
-        {
-            Location = location,
-            TimestampUtc = timestampUtc,
-            TemperatureCelsius = temperatureCelsius,
-            WindSpeedKmh = windSpeedKmh,
-            HumidityPercent = humidityPercent,
-        };
+        return new WeatherReading(
+            location,
+            timestampUtc,
+            temperatureCelsius,
+            windSpeedKmh,
+            humidityPercent);
     }
 }
