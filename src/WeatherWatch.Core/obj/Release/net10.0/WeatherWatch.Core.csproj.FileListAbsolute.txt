@@ -1,0 +1,12 @@
+/home/runner/work/Test/Test/src/WeatherWatch.Core/bin/Release/net10.0/WeatherWatch.Core.deps.json
+/home/runner/work/Test/Test/src/WeatherWatch.Core/bin/Release/net10.0/WeatherWatch.Core.dll
+/home/runner/work/Test/Test/src/WeatherWatch.Core/bin/Release/net10.0/WeatherWatch.Core.pdb
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/WeatherWatch.Core.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/WeatherWatch.Core.AssemblyInfoInputs.cache
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/WeatherWatch.Core.AssemblyInfo.cs
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/WeatherWatch.Core.csproj.CoreCompileInputs.cache
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/WeatherWatch.Core.sourcelink.json
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/WeatherWatch.Core.dll
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/refint/WeatherWatch.Core.dll
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/WeatherWatch.Core.pdb
+/home/runner/work/Test/Test/src/WeatherWatch.Core/obj/Release/net10.0/ref/WeatherWatch.Core.dll
